@@ -15,6 +15,8 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
   config.vm.box_version = "~> 20190314.0.0"
  
+  # map vm กับเครื่อง สามารถใช้ port 8000
+  # runserver 0.0.0.0:8000 บน VM
   config.vm.network "forwarded_port", guest: 8000, host: 8000
  
   config.vm.provision "shell", inline: <<-SHELL
@@ -23,8 +25,6 @@ Vagrant.configure("2") do |config|
   
     sudo apt-get update
     sudo apt-get install -y python3-venv zip
-    sudo apt install python3-pip
-    sudo apt pip3 install pipenv
     touch /home/vagrant/.bash_aliases
     if ! grep -q PYTHON_ALIAS_ADDED /home/vagrant/.bash_aliases; then
       echo "# PYTHON_ALIAS_ADDED" >> /home/vagrant/.bash_aliases
