@@ -57,7 +57,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     ''' overwrite ปกติ username ด้วย email '''
-    REQUIRE_FIELDS = ['name']
+    REQUIRED_FIELDS = ['name']
 
     # method เพื่อส่งข้อมูลแสดงผลใน cli
     def get_full_name(self):
