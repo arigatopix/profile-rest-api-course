@@ -1,4 +1,5 @@
 {
   "python.pythonPath": "C:\\Users\\503015\\.virtualenvs\\profile-rest-api-course-48C9qcVp\\Scripts\\python.exe",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "editor.tabSize": 4
 }
