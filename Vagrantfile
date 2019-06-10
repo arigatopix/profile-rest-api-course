@@ -6,6 +6,10 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
+
+  # allow download (wins10)
+  config.vm.box_download_insecure = true
+  
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
@@ -14,6 +18,8 @@ Vagrant.configure("2") do |config|
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "ubuntu/bionic64"
   config.vm.box_version = "~> 20190314.0.0"
+
+  config.vm.synced_folder ".", "/vagrant"
  
   # map vm กับเครื่อง สามารถใช้ port 8000
   # runserver 0.0.0.0:8000 บน VM
@@ -24,11 +30,11 @@ Vagrant.configure("2") do |config|
     systemctl disable apt-daily.timer
   
     sudo apt-get update
-    sudo apt-get install -y python3-venv zip
-    touch /home/vagrant/.bash_aliases
-    if ! grep -q PYTHON_ALIAS_ADDED /home/vagrant/.bash_aliases; then
-      echo "# PYTHON_ALIAS_ADDED" >> /home/vagrant/.bash_aliases
-      echo "alias python='python3'" >> /home/vagrant/.bash_aliases
-    fi
+    sudo apt-get install -y python3
+    sudo apt-get install -y python3-pip
+    pip3 install pipenv
+
+
+
   SHELL
  end
