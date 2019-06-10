@@ -10,4 +10,4 @@ djangorestframework = "==3.9.2"
 Django = "==2.2"
 
 [requires]
-python_version = "3.7.3"
+python_version = "3.7"

@@ -30,8 +30,17 @@ Vagrant.configure("2") do |config|
     systemctl disable apt-daily.timer
   
     sudo apt-get update
+    sudo apt-get upgrade
     sudo apt-get install -y python3
     sudo apt-get install -y python3-pip
+
+    # update python
+    sudo apt-get install python3.7
+    sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1
+    sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2
+    # sudo update-alternatives --config python3
+
+    # pipenv install
     pip3 install pipenv
 
 
