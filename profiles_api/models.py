@@ -46,6 +46,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     - ใช้ email เป็นตัว login ต้อง migrate ก่อน django ถึงจะทำงานได้
     - AbstractBaseUer : เปลี่ยน structure ของ default user เช่นตั้งค่าให้ email เป็น USERNAME_FIELD, is_active, set_password etc.
     - PermissionsMixin : เปลี่ยน permission แบบ custom เช่น staff, superuser
+    อย่าลืมไป register admin , django จะตั้งชื่อในหน้า admin แยกชื่อ class ตามตัวพิมพ์ใหญ่
     '''
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
