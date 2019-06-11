@@ -1,8 +1,10 @@
 from rest_framework import serializers
 
 class HelloSerializer(serializers.Serializer):
-    """ serializers เป็น class Serializer (ไม่มี s) , a name field for testing our APIView"""
-    """ เอาไปเรียกใช้ใน views.py ต่อในการ post, put, patch """
+    """ 
+    - serializers เป็น class Serializer (ไม่มี s) , a name field for testing our APIView
+    - เอาไปเรียกใช้ใน views.py ต่อในการ post, put, patch
+    """
 
     name = serializers.CharField(max_length=10)
 
