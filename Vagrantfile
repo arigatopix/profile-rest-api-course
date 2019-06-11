@@ -8,7 +8,11 @@
 Vagrant.configure("2") do |config|
 
   # allow download (wins10)
-  config.vm.box_download_insecure = true
+  # config.vm.box_download_insecure = true
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+  end
   
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
