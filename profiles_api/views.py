@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework import status
 # TokenAuthentication เป็น Type ของ auth ที่ใช้กับ api จะ gen ให้อัตโนมัติ
 from rest_framework.authentication import TokenAuthentication
+# Search profile by name, email
+from rest_framework import filters
 # import serializers
 from profiles_api import serializers
 # import models สำหรับ เพื่อใช้กับ modelViewSet คล้ายๆ viewsets เพื่อ mananging models ผ่าน api
@@ -155,6 +157,11 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
     permission_classes = (permissions.UpdateOwnProfile, )
     """ permission คือการกำหนดให้ user ทำในสิ่งที่ทำได้ """
+
+    filter_backends = (filters.SearchFilter, )
+    """ search in backend """
+    search_fields = ('name', 'email', )
+    """ บอก backend ว่าจะ search field อะไรได้บ้าง จะเพิ่ม filter หน้าเว็บ และ querystring ใน url"""
 
 # APIviews สร้าง endpoint (get, post, put, patch) นำไปแสดงผลเหมือนกับ views.py ปกติ แต่นี่เป็น api โดยใช้ rest framework
 # Class-base view จะช่วย render เป็นหน้าจอ api_view converse จาก class to json
