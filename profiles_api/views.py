@@ -6,10 +6,14 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 # check status HTTP
 from rest_framework import status
+# TokenAuthentication เป็น Type ของ auth ที่ใช้กับ api จะ gen ให้อัตโนมัติ
+from rest_framework.authentication import TokenAuthentication
 # import serializers
 from profiles_api import serializers
 # import models สำหรับ เพื่อใช้กับ modelViewSet คล้ายๆ viewsets เพื่อ mananging models ผ่าน api
 from profiles_api import models
+# use permissions
+from profiles_api import permissions
 
 
 class HelloApiView(APIView):
@@ -146,6 +150,11 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = models.UserProfile.objects.all()
     """ django รู้ว่าเราจะ list, post, update, destroy models ก็เลย provide ให้เรียบร้อยแล้วผ่าน serializer_class กับ queryset """
 
+    authentication_classes = (TokenAuthentication, )
+    """ เป็น tuple โดยบรรจุ type ของ auth ที่เราใช้ อาจจะมากกว่า 1 ก็ได้  auth_classes เป็นการ how to authenticate """ 
+
+    permission_classes = (permissions.UpdateOwnProfile, )
+    """ permission คือการกำหนดให้ user ทำในสิ่งที่ทำได้ """
 
 # APIviews สร้าง endpoint (get, post, put, patch) นำไปแสดงผลเหมือนกับ views.py ปกติ แต่นี่เป็น api โดยใช้ rest framework
 # Class-base view จะช่วย render เป็นหน้าจอ api_view converse จาก class to json
