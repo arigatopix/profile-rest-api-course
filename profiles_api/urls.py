@@ -7,7 +7,11 @@ from rest_framework.routers import DefaultRouter
 # DefaultRouter คือ เมื่อเข้า /api/ จะแสดงผล urls ที่ register ไว้ในหน้านี้ เพื่อดูว่ามี url อะไรบ้าง
 router = DefaultRouter()
 router.register('hello-viewset', views.HelloViewSet, base_name='hello-viewset')
-""" access API Viewset (url ตั้งชื่อที่ base_name หรือใช้ query_set) """
+""" ? access API Viewset (url ตั้งชื่อที่ base_name หรือใช้ queryset) """
+
+# register UserProfileViewSet
+router.register('profile', views.UserProfileViewSet)
+""" ไม่ต้องมี basename เพราะ queryset provide ให้ """
 
 urlpatterns = [
     # เป็นการเรียกแบบ class base ของ django

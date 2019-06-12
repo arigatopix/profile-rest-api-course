@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework import status
 # import serializers
 from profiles_api import serializers
+# import models สำหรับ เพื่อใช้กับ modelViewSet คล้ายๆ viewsets เพื่อ mananging models ผ่าน api
+from profiles_api import models
 
 
 class HelloApiView(APIView):
@@ -136,6 +138,15 @@ class HelloViewSet(viewsets.ViewSet):
         return Response({'message': 'DELETE'})
 
 
+# UserProfileViewSet
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """ Handle creating and update profiles """
+
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.UserProfile.objects.all()
+    """ django รู้ว่าเราจะ list, post, update, destroy models ก็เลย provide ให้เรียบร้อยแล้วผ่าน serializer_class กับ queryset """
+
+
 # APIviews สร้าง endpoint (get, post, put, patch) นำไปแสดงผลเหมือนกับ views.py ปกติ แต่นี่เป็น api โดยใช้ rest framework
 # Class-base view จะช่วย render เป็นหน้าจอ api_view converse จาก class to json
 """ 
@@ -153,4 +164,5 @@ Helper class create API endpoint
 	- เขียน code ให้ใกล้เคียงกับ database operations และใกล้เคียงกับ database interface backend
 	- CRUD interface to database
 	- Create simple API
+- ModelViewSet : คล้ายๆ กับ viewset ที่สามารถ manage model
  """
