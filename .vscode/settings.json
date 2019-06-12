@@ -1,5 +1,9 @@
 {
   "python.pythonPath": "C:\\Users\\503015\\.virtualenvs\\profile-rest-api-course-48C9qcVp\\Scripts\\python.exe",
   "editor.formatOnSave": true,
-  "editor.tabSize": 4
+
+  "python.linting.pep8Enabled": false,
+  "python.linting.pylintPath": "C:\\Users\\503015\\AppData\\Local\\Continuum\\anaconda3\\Scripts\\pylint",
+  "python.linting.pylintArgs": ["--load-plugins", "pylint_django"],
+  "python.linting.pylintEnabled": true
 }

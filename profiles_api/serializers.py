@@ -13,4 +13,6 @@ class HelloSerializer(serializers.Serializer):
     - ช่วยดู validate ตาม data type ที่กำหนดไว้
     - คล้ายๆ django form คอย valide api ที่ส่งเข้ามา
     - เป็น validation rules ของแต่ละ field
+    - สามารถแปลงจาก dict > json,  json = JSONRenderer().render(serializer.data)
+    - แปลงจาก json > dict (Deserializing) data = JSONParser().parse(stream)
  """
