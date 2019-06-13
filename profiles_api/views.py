@@ -10,6 +10,10 @@ from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 # Search profile by name, email
 from rest_framework import filters
+# create auth token เอาไว้แสดงผลใน LoginView
+from rest_framework.authtoken.views import ObtainAuthToken
+# API setting เพราะ..
+from rest_framework.settings import api_settings
 # import serializers
 from profiles_api import serializers
 # import models สำหรับ เพื่อใช้กับ modelViewSet คล้ายๆ viewsets เพื่อ mananging models ผ่าน api
@@ -153,7 +157,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     """ django รู้ว่าเราจะ list, post, update, destroy models ก็เลย provide ให้เรียบร้อยแล้วผ่าน serializer_class กับ queryset """
 
     authentication_classes = (TokenAuthentication, )
-    """ เป็น tuple โดยบรรจุ type ของ auth ที่เราใช้ อาจจะมากกว่า 1 ก็ได้  auth_classes เป็นการ how to authenticate """ 
+    """ เป็น tuple โดยบรรจุ type ของ auth ที่เราใช้ อาจจะมากกว่า 1 ก็ได้  auth_classes เป็นการ how to authenticate """
 
     permission_classes = (permissions.UpdateOwnProfile, )
     """ permission คือการกำหนดให้ user ทำในสิ่งที่ทำได้ """
@@ -162,6 +166,19 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     """ search in backend """
     search_fields = ('name', 'email', )
     """ บอก backend ว่าจะ search field อะไรได้บ้าง จะเพิ่ม filter หน้าเว็บ และ querystring ใน url"""
+
+# Login APIView base on class ObtainAuthToken
+
+
+class UserLoginApiView(ObtainAuthToken):
+    """ Handle creating user authentication tokens """
+    """ จะทำให้ระบุตัวตนได้ด้วยเลข Token เมื่อ login จะมี header Authentication : Token (token no.) มาคู่กับ permission จะต้องใช้ renderer_classes ในการตั้งค่า """
+    """ObtainAuthToken จะเป็นการ custom AuthToken โดย Obtain สามารถเข้าไปใช้งาน urls.py ได้ (เช็ค auth ด้วย url) https://www.django-rest-framework.org/api-guide/authentication/#by-exposing-an-api-endpoint"""
+
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    """ add manaul เพราะใช้ ObtainAuthToken """
+    """ AuthToken เป็นค่าคงที่ของแต่ละคน  """
+
 
 # APIviews สร้าง endpoint (get, post, put, patch) นำไปแสดงผลเหมือนกับ views.py ปกติ แต่นี่เป็น api โดยใช้ rest framework
 # Class-base view จะช่วย render เป็นหน้าจอ api_view converse จาก class to json

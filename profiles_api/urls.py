@@ -16,5 +16,6 @@ router.register('profile', views.UserProfileViewSet)
 urlpatterns = [
     # เป็นการเรียกแบบ class base ของ django
     path('hello-view/', views.HelloApiView.as_view()),
+    path('login/', views.UserLoginApiView.as_view()),
     path('', include(router.urls)),  # คือเข้า hello-viewset/
 ]
