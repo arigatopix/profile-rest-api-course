@@ -46,6 +46,19 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return user
 
 
+class ProfileFeedItemSerializer(serializers.ModelSerializer):
+    """ Serializer profile feed items """
+
+    class Meta:
+        """ บอก serializer ว่าใช้ models อะไร """
+        model = models.ProfileFeedItem
+        fields = ('id', 'user_profile', 'status_text', 'created_on')
+        """ id django จะสร้างให้อัตโนมัติ และต้องให้ user_profile เป็น read_only """
+        extra_kwargs = {
+            'user_profile': {'read_only': True}
+        }
+
+
 """ 
 - Serializers ช่วยแปลง data input เป็น python object เหมือนเปน form validate (post, put, patch)
     - ช่วยดู validate ตาม data type ที่กำหนดไว้

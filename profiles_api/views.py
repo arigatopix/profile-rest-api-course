@@ -14,6 +14,8 @@ from rest_framework import filters
 from rest_framework.authtoken.views import ObtainAuthToken
 # API setting เพราะ..
 from rest_framework.settings import api_settings
+# เช็คว่า user Authenticated หรือไม่ (IsAuthenticated คือต้องล็อกอินอย่างเดียว ถ้า orReadOnly คือไม่ได้ loggin สามารถดูได้)
+from rest_framework.permissions import IsAuthenticated
 # import serializers
 from profiles_api import serializers
 # import models สำหรับ เพื่อใช้กับ modelViewSet คล้ายๆ viewsets เพื่อ mananging models ผ่าน api
@@ -178,6 +180,36 @@ class UserLoginApiView(ObtainAuthToken):
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
     """ add manaul เพราะใช้ ObtainAuthToken """
     """ AuthToken เป็นค่าคงที่ของแต่ละคน  """
+
+
+""" เอา Feed ไปแสดงบน View """
+
+
+class UserProfileFeedViewSet(viewsets.ModelViewSet):
+    """ Handles creating reading and updating profile feed items """
+    authentication_classes = (TokenAuthentication, )
+    """ ใช้ Token เพื่อแยะคนที่ไม่ได้ล็อกอิน ไม่สามารถ input ได้ """
+    serializer_class = serializers.ProfileFeedItemSerializer
+    """ สำหรับ input ข้อมูลและ validate """
+    queryset = models.ProfileFeedItem.objects.all()
+    """ สามารถใช้ function list, post, put, patch delete ได้  """
+    permission_classes = (
+        IsAuthenticated,
+        permissions.UpdateOwnStatus,
+    )
+    """ 
+        - เช็ค permission 2 อันคือ login มั้ย and จำกัด user เจ้าของเท่านั้นที่แก้ไขได้ ... เอาไปใช้กับ frontend ได้แล้ว 
+        - ถ้าต้องการจำกัดให้ user ต้อง login (มี token) เท่านั้นจะต้องใส่ IsAuthenticated แทนที่ IsAuthenticatedOrReadOnly
+    """
+
+    def perform_create(self, serializer):
+        """ Sets the user profile to the logged in user """
+        """ ป้องกัน behavier serializer ปกติจะ save เลย ทีนี้จะ set ให้ user ที่จะ save เอามาจากการ logged in """
+        serializer.save(user_profile=self.request.user)
+        """ 
+        - เอา user ที่ request บันทึกลง db ถ้าไม่มี user (request.user) จะเป็น anonymous user (ขึ้น error) 
+        - anonymous สามารถ delete, put, patch ได้ ..ต้องป้องกันด้วย permission  
+        """
 
 
 # APIviews สร้าง endpoint (get, post, put, patch) นำไปแสดงผลเหมือนกับ views.py ปกติ แต่นี่เป็น api โดยใช้ rest framework

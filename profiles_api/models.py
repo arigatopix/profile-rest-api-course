@@ -1,14 +1,23 @@
 from django.db import models
-from django.contrib.auth.models import (AbstractBaseUser, PermissionsMixin, BaseUserManager)
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    PermissionsMixin,
+    BaseUserManager,
+)
+
+# import USER_MODEL ที่ register ใน settings.py เพราะ
+from django.conf import settings
 
 # Manage for user profiles
+
+
 class UserProfileManager(BaseUserManager):
     """ บอกให้ django สร้าง user ตามที่เรา custom ขึ้นมา """
 
     # cli สร้าง user จะต้องมี email, name, password(default=None)
     def create_user(self, email, name, password=None):
         """ เราแทนที่ username_field ด้วย email_field """
-        
+
         if not email:
             """ check not email or empty """
             raise ValueError('User must have an email address')
@@ -40,6 +49,8 @@ class UserProfileManager(BaseUserManager):
         return user
 
 # Custom user : Database model for users in the system
+
+
 class UserProfile(AbstractBaseUser, PermissionsMixin):
     '''
     ตั้งค่า user เองโดยเป็นส่วนหนึ่งของ Database (model)
@@ -64,7 +75,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     def get_full_name(self):
         """ Retrieve full name of user """
         return self.name
-        
+
     def get_short_name(self):
         """ Retrieve short name of user """
         return self.name
@@ -73,3 +84,32 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         ''' converse UserProfile object to string or show in django admin'''
         """ return string representation of our user """
         return self.email
+
+# models ให้ user โพส status ของตัวเองได้
+
+
+class ProfileFeedItem(models.Model):
+    """ Profile status update """
+    """ link another models ใช้ foreing key ปกติจะลิ้งค์ models ด้วยกัน แต่ถ้าใช้ auth user models ต้องไปอ้างใน settings.py"""
+    # ! ห้ามมี comment ใน () ของ function
+    user_profile = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    status_text = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        """ แปลงเป็น string แสดงใน admin"""
+        return self.status_text
+
+
+"""
++ STEP
+    - models > migrate > register in admin site
+    - serializers
+    - views
+    - permissions
+    - urls
+    
+"""
